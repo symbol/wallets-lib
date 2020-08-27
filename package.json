@@ -1,0 +1,34 @@
+{
+  "name": "symbol-paper-wallets",
+  "version": "1.0.0",
+  "description": "Symbol paper wallets library",
+  "main": "index.js",
+  "scripts": {
+    "prepare": "npm run build",
+    "build": "tsc"
+  },
+  "author": {
+    "name": "Peersyst Technology",
+    "email": "dev@peersyst.com"
+  },
+  "bugs": {
+    "url": "https://github.com/peersyst/symbol-paper-wallet/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peersyst/symbol-paper-wallet.git"
+  },
+  "homepage": "https://github.com/peersyst/symbol-paper-wallet#readme",
+  "license": "MIT",
+  "dependencies": {
+    "symbol-sdk": "0.20.7",
+    "symbol-qr-library": "0.12.0",
+    "symbol-hd-wallets": "0.12.0",
+    "pdf-lib": "1.10.0",
+    "@pdf-lib/fontkit": "1.0.0",
+    "typescript": "^3.7.4"
+  },
+  "devDependencies": {
+    "@types/node": "^13.1.7"
+  }
+}
