@@ -1,9 +1,10 @@
 import {PDFDocument, rgb} from 'pdf-lib';
-import * as fs from "fs";
 import {NetworkType} from "symbol-sdk";
 import * as fontkit from '@pdf-lib/fontkit'
 import {ExtendedKey, MnemonicPassPhrase, Wallet} from "symbol-hd-wallets";
 import {MnemonicQR, ObjectQR} from "symbol-qr-library";
+import * as encodedFont from "./resources/encodedFont";
+import * as encodedBasePdf from "./resources/encodedBasePdf";
 
 const MNEMONIC_POSITION = {
     x: 209,
@@ -30,7 +31,7 @@ const ADDRESS_QR_POSITION = {
 };
 
 const generatePaperWallet = async (mnemonic: MnemonicPassPhrase, network: NetworkType): Promise<Uint8Array> => {
-    const plainPdfFile = fs.readFileSync(__dirname + '/resources/symbol-paper-plain.pdf');
+    const plainPdfFile = new Buffer(encodedBasePdf, 'base64');
     const pdfDoc = await PDFDocument.load(plainPdfFile);
 
     const mnemonicSeed = mnemonic.toSeed().toString('hex');
@@ -38,7 +39,7 @@ const generatePaperWallet = async (mnemonic: MnemonicPassPhrase, network: Networ
     const wallet = new Wallet(xkey);
     const account = wallet.getChildAccount(undefined, network);
 
-    const notoSansFontBytes = fs.readFileSync(__dirname + '/resources/NotoSans-Medium.ttf');
+    const notoSansFontBytes = new Buffer(encodedFont, 'base64');
 
     pdfDoc.registerFontkit(fontkit);
     const notoSansFont = await pdfDoc.embedFont(notoSansFontBytes);
@@ -55,8 +56,8 @@ const generatePaperWallet = async (mnemonic: MnemonicPassPhrase, network: Networ
     });
 
     const mnemonicWords = mnemonic.toArray();
-    const firstMnemonic = mnemonicWords.slice(0, mnemonicWords.length / 2);
-    const secondMnemonic = mnemonicWords.slice((mnemonicWords.length / 2) + 1, mnemonicWords.length);
+    const firstMnemonic = mnemonicWords.slice(0, Math.round(mnemonicWords.length / 2));
+    const secondMnemonic = mnemonicWords.slice(Math.round(mnemonicWords.length / 2), mnemonicWords.length);
 
     page.drawText(firstMnemonic.join(' '), {
         x: MNEMONIC_POSITION.x,

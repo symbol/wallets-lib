@@ -5,3 +5,5 @@
 *.js
 *.js.map
 
+!resources/encodedBasePdf.js
+!resources/encodedFont.js
