@@ -7,27 +7,27 @@ import * as encodedFont from "./resources/encodedFont";
 import * as encodedBasePdf from "./resources/encodedBasePdf";
 
 const MNEMONIC_POSITION = {
-    x: 209,
-    y: 23
+    x: 184,
+    y: 20
 };
 
 const ADDRESS_POSITION = {
-    x: 209,
-    y: 102
+    x: 184,
+    y: 90
 };
 
 const MNEMONIC_QR_POSITION = {
-    x: 300,
-    y: 181,
-    width: 113,
-    height: 113,
+    x: 264,
+    y: 159,
+    width: 99,
+    height: 99,
 };
 
 const ADDRESS_QR_POSITION = {
-    x: 475,
-    y: 181,
-    width: 113,
-    height: 113,
+    x: 418,
+    y: 159,
+    width: 99,
+    height: 99,
 };
 
 const generatePaperWallet = async (mnemonic: MnemonicPassPhrase, network: NetworkType): Promise<Uint8Array> => {
@@ -61,15 +61,15 @@ const generatePaperWallet = async (mnemonic: MnemonicPassPhrase, network: Networ
 
     page.drawText(firstMnemonic.join(' '), {
         x: MNEMONIC_POSITION.x,
-        y: MNEMONIC_POSITION.y + 10 + 7,
-        size: 10,
+        y: MNEMONIC_POSITION.y + 9 + 7,
+        size: 9,
         font: notoSansFont,
         color: rgb(82/256, 0, 198/256),
     });
     page.drawText(secondMnemonic.join(' '), {
         x: MNEMONIC_POSITION.x,
         y: MNEMONIC_POSITION.y,
-        size: 10,
+        size: 9,
         font: notoSansFont,
         color: rgb(82/256, 0, 198/256),
     });
