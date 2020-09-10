@@ -37,7 +37,7 @@ const generatePaperWallet = async (mnemonic: MnemonicPassPhrase, network: Networ
     const mnemonicSeed = mnemonic.toSeed().toString('hex');
     const xkey = ExtendedKey.createFromSeed(mnemonicSeed);
     const wallet = new Wallet(xkey);
-    const account = wallet.getChildAccount(undefined, network);
+    const account = wallet.getChildAccount("m/44'/4343'/0'/0'/0", network);
 
     const notoSansFontBytes = new Buffer(encodedFont, 'base64');
 
