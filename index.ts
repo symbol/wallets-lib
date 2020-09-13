@@ -2,9 +2,11 @@ import {PDFDocument, rgb} from 'pdf-lib';
 import {NetworkType} from "symbol-sdk";
 import * as fontkit from '@pdf-lib/fontkit'
 import {ExtendedKey, MnemonicPassPhrase, Wallet} from "symbol-hd-wallets";
-import {MnemonicQR, ObjectQR} from "symbol-qr-library";
+import {ContactQR, ObjectQR} from "symbol-qr-library";
 import * as encodedFont from "./resources/encodedFont";
 import * as encodedBasePdf from "./resources/encodedBasePdf";
+
+const GENERATION_HASH_SEED = '57F7DA205008026C776CB6AED843393F04CD458E0AA2D9F1D5F31A402072B2D6';
 
 const MNEMONIC_POSITION = {
     x: 184,
@@ -74,8 +76,8 @@ const generatePaperWallet = async (mnemonic: MnemonicPassPhrase, network: Networ
         color: rgb(82/256, 0, 198/256),
     });
 
-    const mnemonicQR = new MnemonicQR(mnemonic, '', network, 'no-chain-id');
-    const qrBase64 = await mnemonicQR.toBase64().toPromise();
+    const plainMnemonicQR = new ObjectQR({ plainMnemonic: mnemonic.plain }, network, GENERATION_HASH_SEED);
+    const qrBase64 = await plainMnemonicQR.toBase64().toPromise();
     const menmonicPng = await pdfDoc.embedPng(qrBase64);
 
     page.drawImage(menmonicPng, {
@@ -85,11 +87,11 @@ const generatePaperWallet = async (mnemonic: MnemonicPassPhrase, network: Networ
         height: MNEMONIC_QR_POSITION.height,
     });
 
-    const addressQR = new ObjectQR({ address: account.address.plain() }, network, 'no-chain-id');
-    const addressQrBase64 = await addressQR.toBase64().toPromise();
-    const addressPng = await pdfDoc.embedPng(addressQrBase64);
+    const contactQR = new ContactQR('Symbol Opt In', account.publicAccount, network, GENERATION_HASH_SEED);
+    const contactQrBase64 = await contactQR.toBase64().toPromise();
+    const contactPng = await pdfDoc.embedPng(contactQrBase64);
 
-    page.drawImage(addressPng, {
+    page.drawImage(contactPng, {
         x: ADDRESS_QR_POSITION.x,
         y: ADDRESS_QR_POSITION.y,
         width: ADDRESS_QR_POSITION.width,
