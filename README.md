@@ -20,10 +20,12 @@ And install plugin dependencies:
 Prepare some constants for use the module:
 
 ```javascript
-import { generatePaperWallet } from 'symbol-paper-wallet'; 
+import { SymbolPaperWallet } from 'symbol-paper-wallet'; 
 import { MnemonicPassPhrase } from "symbol-hd-wallets"; 
-import { NetworkType } from "symbol-sdk";
+import { Account, NetworkType } from "symbol-sdk";
 
-const uint8Array = await generatePaperWallet(MnemonicPassPhrase.createRandom(), NetworkType.MAIN_NET);
+const paperWallet = new SymbolPaperWallet(MnemonicPassPhrase.createRandom(), Account.generateNewAccount(NetworkType.TEST_NET), NetworkType.TEST_NET)
+
+const uint8Array = await paperWallet.toPdf();
 
 ```
