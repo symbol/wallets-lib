@@ -11,6 +11,8 @@
     "moduleResolution": "node",
     "stripInternal": true,
     "allowJs": false,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "lib": [
       "es2016",
       "dom"
