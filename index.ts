@@ -1,8 +1,8 @@
-import {PDFDocument, rgb} from 'pdf-lib';
-import {NetworkType} from "symbol-sdk";
+import { PDFDocument, rgb } from 'pdf-lib';
+import { Address, NetworkType } from "symbol-sdk";
 import * as fontkit from '@pdf-lib/fontkit'
-import {ExtendedKey, MnemonicPassPhrase, Wallet} from "symbol-hd-wallets";
-import {ContactQR, ObjectQR} from "symbol-qr-library";
+import { ExtendedKey, MnemonicPassPhrase, Wallet } from "symbol-hd-wallets";
+import { ContactQR, MnemonicQR } from "symbol-qr-library";
 import * as encodedFont from "./resources/encodedFont";
 import * as encodedBasePdf from "./resources/encodedBasePdf";
 
@@ -39,7 +39,8 @@ const generatePaperWallet = async (mnemonic: MnemonicPassPhrase, network: Networ
     const mnemonicSeed = mnemonic.toSeed().toString('hex');
     const xkey = ExtendedKey.createFromSeed(mnemonicSeed);
     const wallet = new Wallet(xkey);
-    const account = wallet.getChildAccount("m/44'/4343'/0'/0'/0'", network);
+    const accountPublicKey: string = wallet.getChildAccountPublicKey("m/44'/4343'/0'/0'/0'");
+    const address: Address = Address.createFromPublicKey(accountPublicKey, network)
 
     const notoSansFontBytes = new Buffer(encodedFont, 'base64');
 
@@ -49,7 +50,7 @@ const generatePaperWallet = async (mnemonic: MnemonicPassPhrase, network: Networ
     const pages = pdfDoc.getPages();
     const page = pages[0];
 
-    page.drawText(account.address.pretty(), {
+    page.drawText(address.pretty(), {
         x: ADDRESS_POSITION.x,
         y: ADDRESS_POSITION.y,
         size: 12,
@@ -76,7 +77,7 @@ const generatePaperWallet = async (mnemonic: MnemonicPassPhrase, network: Networ
         color: rgb(82/256, 0, 198/256),
     });
 
-    const plainMnemonicQR = new ObjectQR({ plainMnemonic: mnemonic.plain }, network, GENERATION_HASH_SEED);
+    const plainMnemonicQR = new MnemonicQR(mnemonic.plain, network, GENERATION_HASH_SEED);
     const qrBase64 = await plainMnemonicQR.toBase64().toPromise();
     const menmonicPng = await pdfDoc.embedPng(qrBase64);
 
@@ -87,7 +88,7 @@ const generatePaperWallet = async (mnemonic: MnemonicPassPhrase, network: Networ
         height: MNEMONIC_QR_POSITION.height,
     });
 
-    const contactQR = new ContactQR('Symbol Opt In', account.publicAccount, network, GENERATION_HASH_SEED);
+    const contactQR = new ContactQR('Symbol Opt In', accountPublicKey, network, GENERATION_HASH_SEED);
     const contactQrBase64 = await contactQR.toBase64().toPromise();
     const contactPng = await pdfDoc.embedPng(contactQrBase64);
 
