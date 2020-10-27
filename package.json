@@ -1,6 +1,6 @@
 {
   "name": "symbol-paper-wallets",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Symbol paper wallets library",
   "main": "index.js",
   "scripts": {
