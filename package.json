@@ -7,10 +7,16 @@
     "prepare": "npm run build",
     "build": "tsc"
   },
-  "author": {
-    "name": "Peersyst Technology",
-    "email": "dev@peersyst.com"
-  },
+  "contributors": [
+    {
+      "name": "Peersyst Technology",
+      "email": "dev@peersyst.com"
+    },
+    {
+      "name": "NEM Software Ltd",
+      "email": "info@nem.software"
+    }
+  ],
   "bugs": {
     "url": "https://github.com/peersyst/symbol-paper-wallet/issues"
   },
