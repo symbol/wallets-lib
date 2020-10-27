@@ -70,7 +70,6 @@ class SymbolPaperWallet {
         this.hdAccount = hdAccountInfo;
         this.accountInfos = accountInfos;
         this.network = network;
-        this.network = network;
         this.generationHashSeed = generationHashSeed
     }
 
