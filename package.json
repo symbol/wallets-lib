@@ -25,7 +25,7 @@
     "url": "git+https://github.com/nemgrouplimited/symbol-paper-wallets.git"
   },
   "homepage": "https://github.com/nemgrouplimited/symbol-paper-wallets#readme",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "dependencies": {
     "@pdf-lib/fontkit": "1.0.1",
     "pdf-lib": "1.10.0",
