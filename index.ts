@@ -1,9 +1,9 @@
 import {PDFDocument, PDFFont, PDFPage, rgb} from 'pdf-lib';
-import * as fontkit from '@pdf-lib/fontkit'
+import fontkit from '@pdf-lib/fontkit'
 import {AccountQR, ContactQR, MnemonicQR, QRCode} from "symbol-qr-library";
-import * as encodedFont from "./resources/encodedFont";
-import * as encodedBasePdf from "./resources/encodedBasePdf";
-import * as encodedBasePrivateKeyPdf from "./resources/encodedBasePrivateKeyPdf";
+import encodedFont from "./resources/encodedFont";
+import encodedBasePdf from "./resources/encodedBasePdf";
+import encodedBasePrivateKeyPdf from "./resources/encodedBasePrivateKeyPdf";
 
 /**
  * Default generation hash
