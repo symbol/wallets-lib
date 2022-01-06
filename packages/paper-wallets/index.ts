@@ -14,12 +14,11 @@
  *
  */
 
-import { PDFDocument, PDFFont, PDFPage, rgb } from "pdf-lib";
+import { PDFDocument, PDFFont, PDFName, PDFPage, rgb } from "pdf-lib";
 import fontkit from "@pdf-lib/fontkit";
 import { AccountQR, ContactQR, MnemonicQR, QRCode } from "symbol-qr-library";
 import encodedFont from "./resources/encodedFont";
 import encodedBasePdf from "./resources/encodedBasePdf";
-import encodedBasePrivateKeyPdf from "./resources/encodedBasePrivateKeyPdf";
 
 /**
  * Default generation hash
@@ -98,17 +97,39 @@ class SymbolPaperWallet {
    * Exports as a PDF Uin8Array
    */
   async toPdf(): Promise<Uint8Array> {
+    // Load teplate pdf document. It consists of 2 pages - mnemonic and account.
     const plainPdfFile = new Buffer(encodedBasePdf, "base64");
     let pdfDoc = await PDFDocument.load(plainPdfFile);
     const notoSansFontBytes = new Buffer(encodedFont, "base64");
     pdfDoc.registerFontkit(fontkit);
     const notoSansFont = await pdfDoc.embedFont(notoSansFontBytes);
 
-    pdfDoc = await this.writeMnemonicPage(pdfDoc, notoSansFont);
+    const templatePages = pdfDoc.getPages();
+    const templateMnemonicPage = templatePages[0];
+    const templateAccountPage = templatePages[1];
 
-    for (let account of this.accountInfos) {
-      pdfDoc = await this.writeAccountPage(account, pdfDoc);
+    // Clone the template account page depending on the account info count
+    if (this.accountInfos?.length) {
+      for (let index = 0; index < this.accountInfos.length - 1; index++) {
+        pdfDoc.addPage(this.copyPage(templateAccountPage));
+      }
+
+      const pages = pdfDoc.getPages();
+
+      // Fill the template account pages with data
+      for (const index in this.accountInfos) {
+        const accountPageIndex = 1 + Number(index);
+        await this.writeAccountPage(this.accountInfos[index], pdfDoc, pages[accountPageIndex], notoSansFont);
+      }
     }
+    else {
+      // If there is no account info remove the template account page from document
+      pdfDoc.removePage(1);
+    }
+
+    // Fill the template mnemonic page with data
+    await this.writeMnemonicPage(pdfDoc, templateMnemonicPage, notoSansFont);
+
     return pdfDoc.save();
   }
 
@@ -119,10 +140,9 @@ class SymbolPaperWallet {
    */
   private async writeMnemonicPage(
     pdfDoc: PDFDocument,
+    page: PDFPage,
     font: PDFFont
-  ): Promise<PDFDocument> {
-    const pages = pdfDoc.getPages();
-    const page = pages[0];
+  ): Promise<void> {
     await this.writeAddress(this.hdAccount.rootAccountAddress, page, font);
 
     const mnemonicWords = this.hdAccount.mnemonic.split(" ");
@@ -154,8 +174,6 @@ class SymbolPaperWallet {
       this.generationHashSeed
     );
     await this.writePublicQR(contactQR, pdfDoc, page);
-
-    return pdfDoc;
   }
 
   /**
@@ -165,25 +183,19 @@ class SymbolPaperWallet {
    */
   private async writeAccountPage(
     account: IAccountInfo,
-    pdfDoc: PDFDocument
-  ): Promise<PDFDocument> {
-    const newPlainPdfFile = new Buffer(encodedBasePrivateKeyPdf, "base64");
-    const newPdfDoc = await PDFDocument.load(newPlainPdfFile);
-    const notoSansFontBytes = new Buffer(encodedFont, "base64");
-    newPdfDoc.registerFontkit(fontkit);
-    const font = await newPdfDoc.embedFont(notoSansFontBytes);
-
-    let accountPage = newPdfDoc.getPages()[0];
-    await this.writeAddress(account.address, accountPage, font);
-
-    await this.writePrivateInfo([account.privateKey], accountPage, font);
+    pdfDoc: PDFDocument,
+    page: PDFPage,
+    font: PDFFont
+  ): Promise<void> {
+    await this.writeAddress(account.address, page, font);
+    await this.writePrivateInfo([account.privateKey], page, font);
 
     const accountQR = new AccountQR(
       account.privateKey,
       this.network,
       this.generationHashSeed
     );
-    await this.writePrivateQR(accountQR, newPdfDoc, accountPage);
+    await this.writePrivateQR(accountQR, pdfDoc, page);
 
     const contactQR = new ContactQR(
       account.name,
@@ -191,11 +203,7 @@ class SymbolPaperWallet {
       this.network,
       this.generationHashSeed
     );
-    await this.writePublicQR(contactQR, newPdfDoc, accountPage);
-
-    [accountPage] = await pdfDoc.copyPages(newPdfDoc, [0]);
-    pdfDoc.addPage(accountPage);
-    return pdfDoc;
+    await this.writePublicQR(contactQR, pdfDoc, page);
   }
 
   /**
@@ -287,6 +295,24 @@ class SymbolPaperWallet {
     });
     return page;
   }
+
+  /**
+   * Clones a PDF page
+   * @param page
+   */
+  private copyPage(page: PDFPage): PDFPage {
+    const clonedNode = page.node.clone();
+    const { Contents } = page.node.normalizedEntries();
+
+    if (Contents) {
+      clonedNode.set(PDFName.of('Contents'), Contents.clone());
+    }
+
+    const clonedRef = page.doc.context.register(clonedNode);
+    const clonedPage = PDFPage.of(clonedNode, clonedRef, page.doc);
+
+    return clonedPage;
+  };
 }
 
 export { SymbolPaperWallet };
