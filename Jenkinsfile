@@ -17,8 +17,10 @@ pipeline {
         ALPHA_BUILD_NUMBER = sh(script: "echo `date +%Y%m%d%H%M`", returnStdout: true).trim()
         DEPLOY_ALPHA_BRANCH = "${params.DEPLOY_ALPHA_BRANCH}"
         DEPLOY_RELEASE_BRANCH = "${params.DEPLOY_RELEASE_BRANCH}"
-        MATCH_GIT_BASIC_AUTHORIZATION = credentials('GHUB_CREDS_SECRET')
-        MATCH_PASSWORD = credentials('MATCH_PASSWORD')
+        NPM_PUBLSH_KEY = credentials("NPM_PUBLSH_KEY")
+        NPM_PUBLSH_EMAIL = credentials("NPM_PUBLSH_EMAIL")
+        MATCH_GIT_BASIC_AUTHORIZATION = credentials("GHUB_CREDS_SECRET")
+        MATCH_PASSWORD = credentials("MATCH_PASSWORD")
     }
 
     stages {
