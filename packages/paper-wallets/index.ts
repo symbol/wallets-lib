@@ -97,7 +97,7 @@ class SymbolPaperWallet {
    * Exports as a PDF Uin8Array
    */
   async toPdf(): Promise<Uint8Array> {
-    // Load teplate pdf document. It consists of 2 pages - mnemonic and account.
+    // Load template pdf document. It consists of 2 pages - mnemonic and account.
     const plainPdfFile = new Buffer(encodedBasePdf, "base64");
     let pdfDoc = await PDFDocument.load(plainPdfFile);
     const notoSansFontBytes = new Buffer(encodedFont, "base64");
