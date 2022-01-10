@@ -254,7 +254,7 @@ class SymbolPaperWallet {
     page: PDFPage
   ): Promise<PDFPage> {
     const qrBase64 = await qr.toBase64().toPromise();
-    const png = await pdfDoc.embedPng(qrBase64);
+    const png = await pdfDoc.embedPng(qrBase64 as string);
 
     page.drawImage(png, {
       x: MNEMONIC_QR_POSITION.x,
@@ -277,7 +277,7 @@ class SymbolPaperWallet {
     page: PDFPage
   ): Promise<PDFPage> {
     const qrBase64 = await qr.toBase64().toPromise();
-    const png = await pdfDoc.embedPng(qrBase64);
+    const png = await pdfDoc.embedPng(qrBase64 as string);
 
     page.drawImage(png, {
       x: ADDRESS_QR_POSITION.x,

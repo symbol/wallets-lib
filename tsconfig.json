@@ -10,7 +10,7 @@
         "declaration": true,
         "moduleResolution": "node",
         "stripInternal": true,
-        "allowJs": false,
+        "allowJs": true,
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
         "lib": [
@@ -20,7 +20,7 @@
         "typeRoots": [
             "node_modules/@types"
         ],
-        "outDir": "./build",
+        "outDir": "./dist",
         "noStrictGenericChecks": true
     },
     "files": [
@@ -28,7 +28,7 @@
     ],
     "exclude": [
         "node_modules",
-        "build"
+        "dist"
     ],
     "include": [
         "packages/**/*.ts",
