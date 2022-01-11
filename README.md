@@ -1,7 +1,12 @@
 # Symbol Wallets Lib
 
-1. [Installation](#installation)
+1. [Requirements](#requirements)
+2. [Installation](#installation)
 2. [Paper Wallet Usage](#paper-wallet-usage)
+
+## Requirements <a name="requirements"></a>
+
+- Node.js 12 or above
 
 ## Installation <a name="installation"></a>
 
@@ -13,8 +18,8 @@ And install plugin dependencies:
 
 `npm install symbol-sdk symbol-hd-wallets --save`
 
-
-## Usage <a name="paper-wallet-usage"></a>
+## Usage 
+### Paper Wallet <a name="paper-wallet-usage"></a>
 
 Prepare some constants for use the module:
 
