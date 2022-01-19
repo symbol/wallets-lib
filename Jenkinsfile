@@ -17,10 +17,8 @@ pipeline {
         ALPHA_BUILD_NUMBER = sh(script: "echo `date +%Y%m%d%H%M`", returnStdout: true).trim()
         DEPLOY_ALPHA_BRANCH = "${params.DEPLOY_ALPHA_BRANCH}"
         DEPLOY_RELEASE_BRANCH = "${params.DEPLOY_RELEASE_BRANCH}"
-        NPM_PUBLSH_KEY = credentials("NPM_PUBLSH_KEY")
-        NPM_PUBLSH_EMAIL = credentials("NPM_PUBLSH_EMAIL")
-        MATCH_GIT_BASIC_AUTHORIZATION = credentials("GHUB_CREDS_SECRET")
-        MATCH_PASSWORD = credentials("MATCH_PASSWORD")
+        NPM_PUBLISH_KEY = credentials("NPM_PUBLISH_KEY")
+        NPM_PUBLISH_EMAIL = credentials("NPM_PUBLISH_EMAIL")
     }
 
     stages {
@@ -51,8 +49,8 @@ pipeline {
                 }
             }
             steps {
-                sh "echo _auth=${NPM_PUBLSH_KEY} >> .npmrc"
-                sh "echo email=${NPM_PUBLSH_EMAIL} >> .npmrc"
+                sh "echo _auth=${NPM_PUBLISH_KEY} >> .npmrc"
+                sh "echo email=${NPM_PUBLISH_EMAIL} >> .npmrc"
                 sh "echo always-auth=true >> .npmrc"
 
                 sh "npm version ${VERSION_NUMBER}-alpha-${ALPHA_BUILD_NUMBER} --commit-hooks false --git-tag-version false"
@@ -67,8 +65,8 @@ pipeline {
                 }
             }
             steps {
-                sh "echo _auth=${NPM_PUBLSH_KEY} >> .npmrc"
-                sh "echo email=${NPM_PUBLSH_EMAIL} >> .npmrc"
+                sh "echo _auth=${NPM_PUBLISH_KEY} >> .npmrc"
+                sh "echo email=${NPM_PUBLISH_EMAIL} >> .npmrc"
                 sh "echo always-auth=true >> .npmrc"
 
                 sh "npm publish"
