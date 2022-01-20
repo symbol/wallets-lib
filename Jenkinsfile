@@ -17,7 +17,7 @@ pipeline {
         ALPHA_BUILD_NUMBER = sh(script: "echo `date +%Y%m%d%H%M`", returnStdout: true).trim()
         DEPLOY_ALPHA_BRANCH = "${params.DEPLOY_ALPHA_BRANCH}"
         DEPLOY_RELEASE_BRANCH = "${params.DEPLOY_RELEASE_BRANCH}"
-        NPM_PUBLISH_KEY = credentials("NPM_PUBLISH_KEY")
+        NPM_TOKEN_ID = credentials("NPM_TOKEN_ID")
         NPM_PUBLISH_EMAIL = credentials("NPM_PUBLISH_EMAIL")
     }
 
@@ -49,7 +49,7 @@ pipeline {
                 }
             }
             steps {
-                sh "echo _auth=${NPM_PUBLISH_KEY} >> .npmrc"
+                sh "echo _auth=${NPM_TOKEN_ID} >> .npmrc"
                 sh "echo email=${NPM_PUBLISH_EMAIL} >> .npmrc"
                 sh "echo always-auth=true >> .npmrc"
 
@@ -65,7 +65,7 @@ pipeline {
                 }
             }
             steps {
-                sh "echo _auth=${NPM_PUBLISH_KEY} >> .npmrc"
+                sh "echo _auth=${NPM_TOKEN_ID} >> .npmrc"
                 sh "echo email=${NPM_PUBLISH_EMAIL} >> .npmrc"
                 sh "echo always-auth=true >> .npmrc"
 
