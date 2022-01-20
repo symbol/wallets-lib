@@ -18,7 +18,6 @@ pipeline {
         DEPLOY_ALPHA_BRANCH = "${params.DEPLOY_ALPHA_BRANCH}"
         DEPLOY_RELEASE_BRANCH = "${params.DEPLOY_RELEASE_BRANCH}"
         NPM_TOKEN_ID = credentials("NPM_TOKEN_ID")
-        NPM_PUBLISH_EMAIL = credentials("NPM_PUBLISH_EMAIL")
     }
 
     stages {
@@ -49,9 +48,7 @@ pipeline {
                 }
             }
             steps {
-                sh "echo _auth=${NPM_TOKEN_ID} >> .npmrc"
-                sh "echo email=${NPM_PUBLISH_EMAIL} >> .npmrc"
-                sh "echo always-auth=true >> .npmrc"
+                sh "echo //registry.npmjs.org/:_authToken=${NPM_TOKEN_ID} >> .npmrc"
 
                 sh "npm version ${VERSION_NUMBER}-alpha-${ALPHA_BUILD_NUMBER} --commit-hooks false --git-tag-version false"
                 sh "npm publish --tag alpha"
@@ -65,9 +62,7 @@ pipeline {
                 }
             }
             steps {
-                sh "echo _auth=${NPM_TOKEN_ID} >> .npmrc"
-                sh "echo email=${NPM_PUBLISH_EMAIL} >> .npmrc"
-                sh "echo always-auth=true >> .npmrc"
+                sh "echo //registry.npmjs.org/:_authToken=${NPM_TOKEN_ID} >> .npmrc"
 
                 sh "npm publish"
             }
