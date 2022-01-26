@@ -1,26 +1,30 @@
-# Symbol Paper Wallets
+# Symbol Wallets Lib
 
-Symbol paper wallet generator
+1. [Requirements](#requirements)
+2. [Installation](#installation)
+2. [Paper Wallet Usage](#paper-wallet-usage)
 
-1. [Installation](#installation)
-2. [Usage](#usage)
+## Requirements <a name="requirements"></a>
+
+- Node.js 12 or above
 
 ## Installation <a name="installation"></a>
 
 To install the npm module on your typescript or node project run:
 
-`npm install symbol-paper-wallets --save`
+`npm install symbol-wallets-lib --save`
 
 And install plugin dependencies:
 
 `npm install symbol-sdk symbol-hd-wallets --save`
 
-## Usage <a name="usage"></a>
+## Usage 
+### Paper Wallet <a name="paper-wallet-usage"></a>
 
 Prepare some constants for use the module:
 
 ```javascript
-import { SymbolPaperWallet } from 'symbol-paper-wallet';
+import { SymbolPaperWallet } from 'symbol-wallets-lib';
 
 const hdRootAccount = {
     mnemonic: "guess welcome coconut forum cricket unfold welcome still ticket cluster buddy fan decrease cotton model drive student assault cloth protect random equal this congress",
